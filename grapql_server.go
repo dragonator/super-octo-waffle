@@ -1,14 +1,14 @@
 package main
 
 import (
-    "context"
-    "log"
-    "net/http"
-    "strings"
+	"context"
+	"log"
+	"net/http"
+	"strings"
 
-    "github.com/friendsofgo/graphiql"
-    "github.com/graph-gophers/graphql-go/relay"
-    graphql "github.com/graph-gophers/graphql-go"
+	"github.com/friendsofgo/graphiql"
+	graphql "github.com/graph-gophers/graphql-go"
+	"github.com/graph-gophers/graphql-go/relay"
 )
 
 // Schema
@@ -30,31 +30,32 @@ schema {
 
 // Model
 type Vegetable struct {
-    name  string
-    price int
-    image *string
+	name  string
+	price int
+	image *string
 }
+
 var vegetables map[string]Vegetable
 
 // Utils
 func strPtr(str string) *string {
-    return &str
+	return &str
 }
 
 // Query
 type query struct{}
 
 func (q *query) Vegetable(ctx context.Context, args struct{ Name string }) *VegetableResolver {
-    v, ok := vegetables[strings.ToLower(args.Name)]
-    if ok {
-        return &VegetableResolver{v: &v}
-    }
-    return nil
+	v, ok := vegetables[strings.ToLower(args.Name)]
+	if ok {
+		return &VegetableResolver{v: &v}
+	}
+	return nil
 }
 
 // Resolver
 type VegetableResolver struct {
-    v *Vegetable
+	v *Vegetable
 }
 
 func (r *VegetableResolver) Name() string   { return r.v.name }
@@ -64,25 +65,25 @@ func (r *VegetableResolver) Image() *string { return r.v.image }
 // Main
 func main() {
 
-    schema := graphql.MustParseSchema(Schema, &query{})
-    http.Handle("/query", &relay.Handler{Schema: schema})
+	schema := graphql.MustParseSchema(Schema, &query{})
+	http.Handle("/query", &relay.Handler{Schema: schema})
 
-    // init model
-		vegetables = map[string]Vegetable{
-				"tomato": Vegetable{name: "Tomato", price: 100, image: strPtr("https://picsum.photos/id/152/100/100")},
-				"potato": Vegetable{name: "Potato", price: 50, image: strPtr("https://picsum.photos/id/159/100/100")},
-				"corn": Vegetable{name: "Corn", price: 200},
-		}
+	// init model
+	vegetables = map[string]Vegetable{
+		"tomato": Vegetable{name: "Tomato", price: 100, image: strPtr("https://picsum.photos/id/152/100/100")},
+		"potato": Vegetable{name: "Potato", price: 50, image: strPtr("https://picsum.photos/id/159/100/100")},
+		"corn":   Vegetable{name: "Corn", price: 200},
+	}
 
-    // graphiql
-		// First argument must be same as graphql handler path
-		graphiqlHandler, err := graphiql.NewGraphiqlHandler("/query")
-		if err != nil {
-				panic(err)
-		}
-    http.Handle("/", graphiqlHandler)
+	// graphiql
+	// First argument must be same as graphql handler path
+	graphiqlHandler, err := graphiql.NewGraphiqlHandler("/query")
+	if err != nil {
+		panic(err)
+	}
+	http.Handle("/", graphiqlHandler)
 
-    // Run
-    log.Println("Server ready at 8080")
-    log.Fatal(http.ListenAndServe(":8080", nil))
+	// Run
+	log.Println("Server ready at 8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
