@@ -9,20 +9,20 @@ import (
 	"golang.org/x/oauth2"
 )
 
-type repository struct {
+type Repository struct {
 	Name        string
 	LicenseInfo struct {
 		Name string
 	}
 }
 
-type basic_query struct {
+type BasicQuery struct {
 	Organization struct {
 		PinnedItems struct {
 			TotalCount int32
 			Edges      []struct {
 				Node struct {
-					Repository repository `graphql:"... on Repository"`
+					Repository Repository `graphql:"... on Repository"`
 				}
 			}
 		} `graphql:"pinnedItems(first: 10, types: [REPOSITORY, GIST])"`
@@ -30,12 +30,12 @@ type basic_query struct {
 }
 
 func main() {
-	token_source := oauth2.StaticTokenSource(
+	tokenSource := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: os.Getenv("GITHUB_TOKEN")},
 	)
-	httpClient := oauth2.NewClient(context.Background(), token_source)
+	httpClient := oauth2.NewClient(context.Background(), tokenSource)
 	client := githubv4.NewClient(httpClient)
-	query := basic_query{}
+	query := BasicQuery{}
 
 	variables := map[string]interface{}{
 		"organization": githubv4.String("vmware"),
