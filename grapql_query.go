@@ -43,8 +43,7 @@ func main() {
 
   err := client.Query(context.Background(), &q, variables)
   if err != nil {
-    fmt.Println(err)
-    os.Exit(1)
+    panic(err)
   }
 
   fmt.Println(q.Organization.PinnedItems.TotalCount)
