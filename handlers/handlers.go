@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -20,7 +21,7 @@ func FetchPinnedItemsHandler(context *gin.Context) {
 
 	client := createGithubClient(context)
 	query := types.PinnedRepositoriesQuery{}
-	err := client.Query(context, query, variables)
+	err := client.Query(context, &query, variables)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, err)
 	}
@@ -30,7 +31,7 @@ func FetchPinnedItemsHandler(context *gin.Context) {
 
 func DownloadCommitPatchHandler(context *gin.Context) {
 	req := prepareCommitPatchRequest(context)
-	client = &http.Client{}
+	client := &http.Client{}
 
 	resp, req_err := client.Do(req)
 	if req_err != nil {
@@ -51,12 +52,12 @@ func DownloadCommitPatchHandler(context *gin.Context) {
 }
 
 func FetchRepositoryDataHandler(context *gin.Context) {
-	commits := make([]Commit)
-	for commit := range requestCommitsInJSON(context) {
-		append(commits, Commit{
-			Message:      commit["commit"]["message"],
-			Author:       commit["committer"]["name"],
-			AuthoredDate: commit["committer"]["date"],
+	commits := []types.Commit{}
+	for _, commit := range requestCommitsInJSON(context) {
+		commits = append(commits, types.Commit{
+			Message:      commit.Commit.Message,
+			Author:       commit.Committer.Name,
+			AuthoredDate: commit.Committer.Date,
 		})
 	}
 
@@ -67,7 +68,7 @@ func FetchRepositoryDataHandler(context *gin.Context) {
 
 	client := createGithubClient(context)
 	query := types.RepositoryQuery{}
-	err := client.Query(context, query, variables)
+	err := client.Query(context, &query, variables)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, err)
 	}
@@ -75,8 +76,8 @@ func FetchRepositoryDataHandler(context *gin.Context) {
 	repository := types.Repository{
 		Name:          query.Repository.Name,
 		NameWithOwner: query.Repository.NameWithOwner,
-		Readme:        query.Readme,
-		PackageJSON:   query.PackageJSON,
+		Readme:        query.Repository.Readme.Blob.Text,
+		PackageJSON:   query.Repository.PackageJSON.Blob.Text,
 		Commits:       commits,
 	}
 
@@ -92,8 +93,8 @@ func createGithubClient(context *gin.Context) *githubv4.Client {
 	return githubv4.NewClient(httpClient)
 }
 
-func requestCommitsInJSON(context *gin.Context) *http.Response {
-	url = fmt.Sprintf("https://api.github.com/repos/%s/%s/commits",
+func requestCommitsInJSON(context *gin.Context) []types.UnmarshalCommitScheme {
+	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/commits",
 		context.Param("organization"),
 		context.Param("repository"))
 
@@ -107,16 +108,17 @@ func requestCommitsInJSON(context *gin.Context) *http.Response {
 		context.JSON(http.StatusInternalServerError, read_err)
 	}
 
-	commits_json, marshal_err := json.Marshal(body)
-	if marshal_err != nil {
-		context.JSON(http.StatusInternalServerError, marshal_err)
+	var unmarshalled_commits []types.UnmarshalCommitScheme
+	unmarshal_err := json.Unmarshal([]byte(body), &unmarshalled_commits)
+	if unmarshal_err != nil {
+		context.JSON(http.StatusInternalServerError, unmarshal_err)
 	}
 
-	return &resp
+	return unmarshalled_commits
 }
 
 func prepareCommitPatchRequest(context *gin.Context) *http.Request {
-	url = fmt.Sprintf("https://api.github.com/repos/%s/%s/commits/%s",
+	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/commits/%s",
 		context.Param("organization"),
 		context.Param("repository"),
 		context.Param("sha"))
@@ -127,5 +129,5 @@ func prepareCommitPatchRequest(context *gin.Context) *http.Request {
 	}
 	req.Header.Add("Accept", "application/vnd.github.VERSION.patch")
 
-	return &req
+	return req
 }

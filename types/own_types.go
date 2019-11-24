@@ -1,9 +1,9 @@
 package types
 
 type PinnedRepositories struct {
-	Organization string
-	TotalCount   int32
-	Repositories []struct {
+	OrganizationName string
+	TotalCount       int32
+	Repositories     []struct {
 		Name              string
 		NameWithOwner     string
 		LicenseName       string

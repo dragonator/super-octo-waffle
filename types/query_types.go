@@ -43,3 +43,13 @@ type RepositoryQuery struct {
 		PackageJSON   blobText `graphql:"package_json: object(expression: \"HEAD:package.json\")"`
 	} `graphql:"repository(owner: $organization, name: $repository)"`
 }
+
+type UnmarshalCommitScheme struct {
+	Commit struct {
+		Message string `json:"message"`
+	} `json:"commit"`
+	Committer struct {
+		Name string `json:"name"`
+		Date string `json:"date"`
+	} `json:"committer"`
+}
