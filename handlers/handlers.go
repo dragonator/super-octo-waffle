@@ -17,7 +17,7 @@ func FetchPinnedItemsHandler(context *gin.Context) {
 	}
 
 	client := createGithubClient(context)
-	query := types.OrganizationsPinnedItems{}
+	query := types.PinnedRepositoriesQuery{}
 	sendQuery(client, context, &query, variables)
 }
 
@@ -28,7 +28,7 @@ func FetchRepositoryDataHandler(context *gin.Context) {
 	}
 
 	client := createGithubClient(context)
-	query := types.RepositoryData{}
+	query := types.RepositoryQuery{}
 	sendQuery(client, context, &query, variables)
 }
 

@@ -1,14 +1,21 @@
-query ($organization: String!, $repository: String!){
+query ($organization: String!, $repository: String!) {
   repository(owner: $organization, name: $repository) {
-    defaultBranchRef {
-      default_branch: target {
-        ... on Commit {
-          history(first: 5) {
-            commits: nodes {
-              messageHeadline
-              authoredDate
-              author {
-                name
+    name
+    nameWithOwner
+    refs(refPrefix: "refs/heads/", last: 20) {
+      nodes {
+        ... on Ref {
+          name
+          target {
+            ... on Commit {
+              history(first: 5) {
+                nodes {
+                  messageHeadline
+                  authoredDate
+                  author {
+                    name
+                  }
+                }
               }
             }
           }

@@ -24,7 +24,7 @@ type repository struct {
 	Refs             refsCommitsCount `graphql:"refs(first: 100, refPrefix: \"refs/heads/\")"`
 }
 
-type OrganizationsPinnedItems struct {
+type PinnedRepositoriesQuery struct {
 	Organization struct {
 		PinnedItems struct {
 			TotalCount int32
@@ -35,21 +35,28 @@ type OrganizationsPinnedItems struct {
 	} `graphql:"organization(login: $organization)"`
 }
 
-type RepositoryData struct {
+type RepositoryQuery struct {
 	Repository struct {
-		DefaultBranchRef struct {
-			DefaultBranch struct {
-				Commit struct {
-					History struct {
-						Nodes []struct {
-							MessageHeadline string
-							AuthoredDate    string
-							Author          struct{ Name string }
-						}
+		Name          string
+		NameWithOwner string
+		Refs          struct {
+			Nodes []struct {
+				Ref struct {
+					Name   string
+					Target struct {
+						Commit struct {
+							History struct {
+								Nodes []struct {
+									MessageHeadline string
+									AuthoredDate    string
+									Author          struct{ Name string }
+								}
+							}
+						} `graphql:"... on Commit"`
 					}
-				} `graphql:"... on Commit"`
-			} `graphql:"default_branch: target"`
-		}
+				} `graphql:"... on Ref"`
+			}
+		} `graphql:"refs(refPrefix: \"refs/heads/\", last: 20)"`
 		Readme      blobText `graphql:"readme: object(expression: \"HEAD:README.md\")"`
 		PackageJSON blobText `graphql:"package_json: object(expression: \"HEAD:package.json\")"`
 	} `graphql:"repository(owner: $organization, name: $repository)"`
