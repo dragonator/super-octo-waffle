@@ -18,7 +18,13 @@ func FetchPinnedItemsHandler(context *gin.Context) {
 
 	client := createGithubClient(context)
 	query := types.PinnedRepositoriesQuery{}
-	sendQuery(client, context, &query, variables)
+	err := client.Query(context, query, variables)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, err)
+	}
+
+	context.JSON(http.StatusOK, query)
+}
 }
 
 func FetchRepositoryDataHandler(context *gin.Context) {
@@ -29,7 +35,12 @@ func FetchRepositoryDataHandler(context *gin.Context) {
 
 	client := createGithubClient(context)
 	query := types.RepositoryQuery{}
-	sendQuery(client, context, &query, variables)
+	err := client.Query(context, query, variables)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, err)
+	}
+
+	context.JSON(http.StatusOK, repository)
 }
 
 func createGithubClient(context *gin.Context) *githubv4.Client {
@@ -41,10 +52,3 @@ func createGithubClient(context *gin.Context) *githubv4.Client {
 	return githubv4.NewClient(httpClient)
 }
 
-func sendQuery(client *githubv4.Client, context *gin.Context, query interface{}, variables map[string]interface{}) {
-	err := client.Query(context, query, variables)
-	if err != nil {
-		context.JSON(http.StatusInternalServerError, err)
-	}
-	context.JSON(http.StatusOK, query)
-}
