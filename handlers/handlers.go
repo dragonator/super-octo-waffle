@@ -27,6 +27,27 @@ func FetchPinnedItemsHandler(context *gin.Context) {
 
 	context.JSON(http.StatusOK, query)
 }
+
+func DownloadCommitPatchHandler(context *gin.Context) {
+	req := prepareCommitPatchRequest(context)
+	client = &http.Client{}
+
+	resp, req_err := client.Do(req)
+	if req_err != nil {
+		context.JSON(http.StatusInternalServerError, req_err)
+	}
+
+	body, read_err := ioutil.ReadAll(resp.Body)
+	if read_err != nil {
+		context.JSON(http.StatusInternalServerError, read_err)
+	}
+
+	//commits_json, marshal_err := json.Marshal(body)
+	//if marshal_err != nil {
+	//	context.JSON(http.StatusInternalServerError, marshal_err)
+	//}
+
+	context.JSON(http.StatusOK, body)
 }
 
 func FetchRepositoryDataHandler(context *gin.Context) {
@@ -92,4 +113,19 @@ func requestCommitsInJSON(context *gin.Context) *http.Response {
 	}
 
 	return &resp
+}
+
+func prepareCommitPatchRequest(context *gin.Context) *http.Request {
+	url = fmt.Sprintf("https://api.github.com/repos/%s/%s/commits/%s",
+		context.Param("organization"),
+		context.Param("repository"),
+		context.Param("sha"))
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, err)
+	}
+	req.Header.Add("Accept", "application/vnd.github.VERSION.patch")
+
+	return &req
 }
