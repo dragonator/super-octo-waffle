@@ -1,0 +1,29 @@
+query ($organization: String!, $repository: String!){
+  repository(owner: $organization, name: $repository) {
+    defaultBranchRef {
+      default_branch: target {
+        ... on Commit {
+          history(first: 5) {
+            commits: nodes {
+              messageHeadline
+              authoredDate
+              author {
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+    readme: object(expression: "HEAD:README.md") {
+      ... on Blob {
+        text
+      }
+    }
+    package_json: object(expression: "HEAD:package.json") {
+      ... on Blob {
+        text
+      }
+    }
+  }
+}
