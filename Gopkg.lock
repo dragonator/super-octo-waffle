@@ -8,6 +8,30 @@
   version = "v0.2.2"
 
 [[projects]]
+  name = "github.com/gin-contrib/sse"
+  packages = ["."]
+  revision = "54d8467d122d380a14768b6b4e5cd7ca4755938f"
+  version = "v0.1.0"
+
+[[projects]]
+  name = "github.com/gin-gonic/gin"
+  packages = [".","binding","internal/json","render"]
+  revision = "15ced05c5316609bce5b43389f8e3f06102a8b18"
+  version = "v1.5.0"
+
+[[projects]]
+  name = "github.com/go-playground/locales"
+  packages = [".","currency"]
+  revision = "9f105231d3a5f6877a2bf8321dfa15ea6f844b1b"
+  version = "v0.13.0"
+
+[[projects]]
+  name = "github.com/go-playground/universal-translator"
+  packages = ["."]
+  revision = "f87b1403479a348651dbf5f07f5cc6e5fcf07008"
+  version = "v0.17.0"
+
+[[projects]]
   name = "github.com/golang/protobuf"
   packages = ["proto"]
   revision = "6c65a5562fc06764971b7c5d05c76c75e84bdbf7"
@@ -18,6 +42,36 @@
   name = "github.com/graph-gophers/graphql-go"
   packages = [".","errors","internal/common","internal/exec","internal/exec/packer","internal/exec/resolvable","internal/exec/selected","internal/query","internal/schema","internal/validation","introspection","log","relay","trace"]
   revision = "f33e813622776db7efec756a9e951bef40932197"
+
+[[projects]]
+  name = "github.com/json-iterator/go"
+  packages = ["."]
+  revision = "03217c3e97663914aec3faafde50d081f197a0a2"
+  version = "v1.1.8"
+
+[[projects]]
+  name = "github.com/leodido/go-urn"
+  packages = ["."]
+  revision = "a0f5013415294bb94553821ace21a1a74c0298cc"
+  version = "v1.2.0"
+
+[[projects]]
+  name = "github.com/mattn/go-isatty"
+  packages = ["."]
+  revision = "88ba11cfdc67c7588b30042edf244b2875f892b6"
+  version = "v0.0.10"
+
+[[projects]]
+  name = "github.com/modern-go/concurrent"
+  packages = ["."]
+  revision = "bacd9c7ef1dd9b15be4a9909b8ac7a4e313eec94"
+  version = "1.0.3"
+
+[[projects]]
+  name = "github.com/modern-go/reflect2"
+  packages = ["."]
+  revision = "4b7aa43c6742a2c18fdef89dd197aaae7dac7ccd"
+  version = "1.0.1"
 
 [[projects]]
   name = "github.com/opentracing/opentracing-go"
@@ -38,6 +92,12 @@
   revision = "d48a9a75455f6af30244670bc0c9d0e38e7392b5"
 
 [[projects]]
+  name = "github.com/ugorji/go"
+  packages = ["codec"]
+  revision = "23ab95ef5dc3b70286760af84ce2327a2b64ed62"
+  version = "v1.1.7"
+
+[[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["context","context/ctxhttp"]
@@ -50,14 +110,32 @@
   revision = "5d9234df094ce600ff541158d1491aa10d078a47"
 
 [[projects]]
+  branch = "master"
+  name = "golang.org/x/sys"
+  packages = ["unix"]
+  revision = "bd437916bb0eb726b873ee8e9b2dcf212d32e2fd"
+
+[[projects]]
   name = "google.golang.org/appengine"
   packages = ["internal","internal/base","internal/datastore","internal/log","internal/remote_api","internal/urlfetch","urlfetch"]
   revision = "971852bfffca25b069c31162ae8f247a3dba083b"
   version = "v1.6.5"
 
+[[projects]]
+  name = "gopkg.in/go-playground/validator.v9"
+  packages = ["."]
+  revision = "691a5f5f25701d0a22785c982db4f22bfac47931"
+  version = "v9.30.1"
+
+[[projects]]
+  name = "gopkg.in/yaml.v2"
+  packages = ["."]
+  revision = "1f64d6156d11335c3f22d9330b0ad14fc1e789ce"
+  version = "v2.2.7"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f98fed0c19f7ba162c39c3c64ec32d92607c6cd8c0c2bec73e0c1287069f6ac3"
+  inputs-digest = "edf3c95973be5cf20b845b1852c38a7ce113f440147486965ef756c4f0258d3c"
   solver-name = "gps-cdcl"
   solver-version = 1
