@@ -22,6 +22,7 @@ func main() {
 	})
 
 	r.GET("/pinnedItems/:organization", handlers.FetchPinnedItemsHandler)
+	r.GET("/pinnedItems/:organization/:repository", handlers.FetchRepositoryDataHandler)
 
 	err := r.Run(":3000")
 	if err != nil {
