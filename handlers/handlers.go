@@ -18,7 +18,7 @@ func FetchPinnedItemsHandler(c *gin.Context) {
 	}
 
 	client := createGithubClient(c)
-	query := types.BasicQuery{}
+	query := types.OrganizationsPinnedItems{}
 
 	err := client.Query(c, &query, variables)
 	if err != nil {
