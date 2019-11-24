@@ -39,25 +39,7 @@ type RepositoryQuery struct {
 	Repository struct {
 		Name          string
 		NameWithOwner string
-		Refs          struct {
-			Nodes []struct {
-				Ref struct {
-					Name   string
-					Target struct {
-						Commit struct {
-							History struct {
-								Nodes []struct {
-									MessageHeadline string
-									AuthoredDate    string
-									Author          struct{ Name string }
-								}
-							}
-						} `graphql:"... on Commit"`
-					}
-				} `graphql:"... on Ref"`
-			}
-		} `graphql:"refs(refPrefix: \"refs/heads/\", last: 20)"`
-		Readme      blobText `graphql:"readme: object(expression: \"HEAD:README.md\")"`
-		PackageJSON blobText `graphql:"package_json: object(expression: \"HEAD:package.json\")"`
+		Readme        blobText `graphql:"readme: object(expression: \"HEAD:README.md\")"`
+		PackageJSON   blobText `graphql:"package_json: object(expression: \"HEAD:package.json\")"`
 	} `graphql:"repository(owner: $organization, name: $repository)"`
 }
