@@ -19,7 +19,7 @@ func FetchPinnedItemsHandler(context *gin.Context) {
 		"organization": githubv4.String(context.Param("organization")),
 	}
 
-	client := createGithubClient(context)
+	client := githubv4.NewClient(createAuthorizedClient(context, os.Getenv("GITHUB_TOKEN")))
 	query := types.PinnedRepositoriesQuery{}
 	err := client.Query(context, &query, variables)
 	if err != nil {
@@ -62,12 +62,12 @@ func DownloadCommitPatchHandler(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, read_err)
 	}
 
-	//commits_json, marshal_err := json.Marshal(body)
+	//patchJSON, marshal_err := json.Marshal(body)
 	//if marshal_err != nil {
-	//	context.JSON(http.StatusInternalServerError, marshal_err)
+	//		context.JSON(http.StatusInternalServerError, marshal_err)
 	//}
 
-	context.JSON(http.StatusOK, body)
+	context.JSON(http.StatusOK, string(body))
 }
 
 func FetchRepositoryDataHandler(context *gin.Context) {
@@ -85,7 +85,7 @@ func FetchRepositoryDataHandler(context *gin.Context) {
 		"repository":   githubv4.String(context.Param("repository")),
 	}
 
-	client := createGithubClient(context)
+	client := githubv4.NewClient(createAuthorizedClient(context, os.Getenv("GITHUB_TOKEN")))
 	query := types.RepositoryQuery{}
 	err := client.Query(context, &query, variables)
 	if err != nil {
@@ -103,13 +103,11 @@ func FetchRepositoryDataHandler(context *gin.Context) {
 	context.JSON(http.StatusOK, repository)
 }
 
-func createGithubClient(context *gin.Context) *githubv4.Client {
+func createAuthorizedClient(context *gin.Context, token string) *http.Client {
 	tokenSource := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: os.Getenv("GITHUB_TOKEN")},
+		&oauth2.Token{AccessToken: token},
 	)
-	httpClient := oauth2.NewClient(context, tokenSource)
-
-	return githubv4.NewClient(httpClient)
+	return oauth2.NewClient(context, tokenSource)
 }
 
 func requestCommitsInJSON(context *gin.Context) []types.UnmarshalCommitScheme {
