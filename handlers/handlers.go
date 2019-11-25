@@ -26,24 +26,8 @@ func FetchPinnedItemsHandler(context *gin.Context) {
 		return
 	}
 
-	repositories := []types.PinnedRepository{}
-	for _, node := range query.Organization.PinnedItems.Nodes {
-		repositories = append(repositories, types.PinnedRepository{
-			Name:              node.Repository.Name,
-			NameWithOwner:     node.Repository.NameWithOwner,
-			LicenseName:       node.Repository.LicenseInfo.Name,
-			ContributorsCount: node.Repository.Collaborators.TotalCount,
-			ReleasesCount:     node.Repository.Releases.TotalCount,
-			HEADCommitsCount:  node.Repository.HEAD.Commit.History.TotalCount,
-			BranchesCount:     node.Repository.Refs.TotalCount,
-		})
-	}
-
-	pinnedRepositories := types.PinnedRepositories{
-		OrganizationName: context.Param("organization"),
-		TotalCount:       query.Organization.PinnedItems.TotalCount,
-		Repositories:     repositories,
-	}
+	pinnedRepositories := initializePinnedRepositories(query)
+	pinnedRepositories.OrganizationName = context.Param("organization")
 
 	context.JSON(http.StatusOK, pinnedRepositories)
 }
@@ -85,25 +69,7 @@ func FetchRepositoryDataHandler(context *gin.Context) {
 		return
 	}
 
-	commits := []types.Commit{}
-	commitHistory := query.Repository.DefaultBranchRef.Target.Commit.History
-	for _, commit := range commitHistory.Nodes {
-		commits = append(commits, types.Commit{
-			Message: commit.MessageHeadline,
-			Author:  commit.Author.Name,
-			Date:    commit.AuthoredDate,
-			Hash:    commit.Oid,
-		})
-	}
-
-	repository := types.Repository{
-		Name:              query.Repository.Name,
-		NameWithOwner:     query.Repository.NameWithOwner,
-		Readme:            query.Repository.Readme.Blob.Text,
-		PackageJSON:       query.Repository.PackageJSON.Blob.Text,
-		DefaultBranchName: query.Repository.DefaultBranchRef.Name,
-		Commits:           commits,
-	}
+	repository := initializeRepository(query)
 
 	context.JSON(http.StatusOK, repository)
 }
