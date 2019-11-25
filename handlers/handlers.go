@@ -26,7 +26,26 @@ func FetchPinnedItemsHandler(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, err)
 	}
 
-	context.JSON(http.StatusOK, query)
+	repositories := []types.PinnedRepository{}
+	for _, node := range query.Organization.PinnedItems.Nodes {
+		repositories = append(repositories, types.PinnedRepository{
+			Name:              node.Repository.Name,
+			NameWithOwner:     node.Repository.NameWithOwner,
+			LicenseName:       node.Repository.LicenseInfo.Name,
+			ContributorsCount: 0, //TODO
+			ReleasesCount:     node.Repository.Releases.TotalCount,
+			DefaultBranchName: node.Repository.DefaultBranchRef.Name,
+			CommitsCount:      node.Repository.HEAD.Commit.History.TotalCount,
+		})
+	}
+
+	pinnedRepositories := types.PinnedRepositories{
+		OrganizationName: context.Param("organization"),
+		TotalCount:       query.Organization.PinnedItems.TotalCount,
+		Repositories:     repositories,
+	}
+
+	context.JSON(http.StatusOK, pinnedRepositories)
 }
 
 func DownloadCommitPatchHandler(context *gin.Context) {

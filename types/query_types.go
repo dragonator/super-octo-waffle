@@ -4,24 +4,17 @@ type blobText struct {
 	Blob struct{ Text string } `graphql:"... on Blob"`
 }
 
-type refsCommitsCount struct {
-	TotalCount int32
-	Nodes      []struct {
-		Target struct {
-			Commit struct {
-				History struct{ TotalCount int32 } `graphql:"history(first: 1)"`
-			} `graphql:"... on Commit"`
-		}
-	}
-}
-
 type repository struct {
 	Name             string
 	NameWithOwner    string
 	LicenseInfo      struct{ Name string }
 	Releases         struct{ TotalCount int32 } `graphql:"releases(last: 5)"`
 	DefaultBranchRef struct{ Name string }
-	Refs             refsCommitsCount `graphql:"refs(first: 100, refPrefix: \"refs/heads/\")"`
+	HEAD             struct {
+		Commit struct {
+			History struct{ TotalCount int32 }
+		} `graphql:"... on Commit"`
+	} `graphql:"object(expression: \"HEAD\")"`
 }
 
 type PinnedRepositoriesQuery struct {
