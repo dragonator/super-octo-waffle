@@ -19,7 +19,7 @@ func FetchPinnedItemsHandler(context *gin.Context) {
 		"organization": githubv4.String(context.Param("organization")),
 	}
 
-	client := githubv4.NewClient(createAuthorizedClient(context, os.Getenv("GITHUB_TOKEN")))
+	client := createAuthorizedGithubClient(context)
 	query := types.PinnedRepositoriesQuery{}
 	err := client.Query(context, &query, variables)
 	if err != nil {
@@ -80,7 +80,7 @@ func FetchRepositoryDataHandler(context *gin.Context) {
 		"repository":   githubv4.String(context.Param("repository")),
 	}
 
-	client := githubv4.NewClient(createAuthorizedClient(context, os.Getenv("GITHUB_TOKEN")))
+	client := createAuthorizedGithubClient(context)
 	query := types.RepositoryQuery{}
 	err := client.Query(context, &query, variables)
 	if err != nil {
@@ -98,11 +98,11 @@ func FetchRepositoryDataHandler(context *gin.Context) {
 	context.JSON(http.StatusOK, repository)
 }
 
-func createAuthorizedClient(context *gin.Context, token string) *http.Client {
+func createAuthorizedGithubClient(context *gin.Context) *githubv4.Client {
 	tokenSource := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: token},
+		&oauth2.Token{AccessToken: os.Getenv("GITHUB_TOKEN")},
 	)
-	return oauth2.NewClient(context, tokenSource)
+	return githubv4.NewClient(oauth2.NewClient(context, tokenSource))
 }
 
 func requestCommitsInJSON(context *gin.Context) []types.UnmarshalCommitScheme {
