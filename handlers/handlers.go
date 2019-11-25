@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -20,10 +19,11 @@ func FetchPinnedItemsHandler(context *gin.Context) {
 	}
 
 	client := createAuthorizedGithubClient(context)
-	query := types.PinnedRepositoriesQuery{}
+	query := types.PinnedRepositoriesGraphQL{}
 	err := client.Query(context, &query, variables)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, err)
+		return
 	}
 
 	repositories := []types.PinnedRepository{}
@@ -34,8 +34,8 @@ func FetchPinnedItemsHandler(context *gin.Context) {
 			LicenseName:       node.Repository.LicenseInfo.Name,
 			ContributorsCount: node.Repository.Collaborators.TotalCount,
 			ReleasesCount:     node.Repository.Releases.TotalCount,
-			DefaultBranchName: node.Repository.DefaultBranchRef.Name,
-			CommitsCount:      node.Repository.HEAD.Commit.History.TotalCount,
+			HEADCommitsCount:  node.Repository.HEAD.Commit.History.TotalCount,
+			BranchesCount:     node.Repository.Refs.TotalCount,
 		})
 	}
 
@@ -49,50 +49,60 @@ func FetchPinnedItemsHandler(context *gin.Context) {
 }
 
 func DownloadCommitPatchHandler(context *gin.Context) {
-	req := prepareCommitPatchRequest(context)
+	req, err := prepareCommitPatchRequest(context)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, err)
+		return
+	}
 	client := &http.Client{}
 
 	resp, req_err := client.Do(req)
 	if req_err != nil {
 		context.JSON(http.StatusInternalServerError, req_err)
+		return
 	}
 
 	body, read_err := ioutil.ReadAll(resp.Body)
 	if read_err != nil {
 		context.JSON(http.StatusInternalServerError, read_err)
+		return
 	}
 
 	context.JSON(http.StatusOK, string(body))
 }
 
 func FetchRepositoryDataHandler(context *gin.Context) {
-	commits := []types.Commit{}
-	for _, commit := range requestCommitsInJSON(context) {
-		commits = append(commits, types.Commit{
-			Message:      commit.Commit.Message,
-			Author:       commit.Committer.Name,
-			AuthoredDate: commit.Committer.Date,
-		})
-	}
-
 	variables := map[string]interface{}{
 		"organization": githubv4.String(context.Param("organization")),
 		"repository":   githubv4.String(context.Param("repository")),
 	}
 
 	client := createAuthorizedGithubClient(context)
-	query := types.RepositoryQuery{}
+	query := types.RepositoryGraphQL{}
 	err := client.Query(context, &query, variables)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	commits := []types.Commit{}
+	commitHistory := query.Repository.DefaultBranchRef.Target.Commit.History
+	for _, commit := range commitHistory.Nodes {
+		commits = append(commits, types.Commit{
+			Message: commit.MessageHeadline,
+			Author:  commit.Author.Name,
+			Date:    commit.AuthoredDate,
+			Hash:    commit.Oid,
+		})
 	}
 
 	repository := types.Repository{
-		Name:          query.Repository.Name,
-		NameWithOwner: query.Repository.NameWithOwner,
-		Readme:        query.Repository.Readme.Blob.Text,
-		PackageJSON:   query.Repository.PackageJSON.Blob.Text,
-		Commits:       commits,
+		Name:              query.Repository.Name,
+		NameWithOwner:     query.Repository.NameWithOwner,
+		Readme:            query.Repository.Readme.Blob.Text,
+		PackageJSON:       query.Repository.PackageJSON.Blob.Text,
+		DefaultBranchName: query.Repository.DefaultBranchRef.Name,
+		Commits:           commits,
 	}
 
 	context.JSON(http.StatusOK, repository)
@@ -105,31 +115,7 @@ func createAuthorizedGithubClient(context *gin.Context) *githubv4.Client {
 	return githubv4.NewClient(oauth2.NewClient(context, tokenSource))
 }
 
-func requestCommitsInJSON(context *gin.Context) []types.UnmarshalCommitScheme {
-	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/commits",
-		context.Param("organization"),
-		context.Param("repository"))
-
-	resp, response_err := http.Get(url)
-	if response_err != nil {
-		context.JSON(http.StatusInternalServerError, response_err)
-	}
-
-	body, read_err := ioutil.ReadAll(resp.Body)
-	if read_err != nil {
-		context.JSON(http.StatusInternalServerError, read_err)
-	}
-
-	var unmarshalled_commits []types.UnmarshalCommitScheme
-	unmarshal_err := json.Unmarshal([]byte(body), &unmarshalled_commits)
-	if unmarshal_err != nil {
-		context.JSON(http.StatusInternalServerError, unmarshal_err)
-	}
-
-	return unmarshalled_commits
-}
-
-func prepareCommitPatchRequest(context *gin.Context) *http.Request {
+func prepareCommitPatchRequest(context *gin.Context) (*http.Request, error) {
 	url := fmt.Sprintf("https://api.github.com/repos/%s/%s/commits/%s",
 		context.Param("organization"),
 		context.Param("repository"),
@@ -137,9 +123,9 @@ func prepareCommitPatchRequest(context *gin.Context) *http.Request {
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, err)
+		return nil, err
 	}
 	req.Header.Add("Accept", "application/vnd.github.VERSION.patch")
 
-	return req
+	return req, err
 }
