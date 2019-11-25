@@ -2,23 +2,29 @@ query ($organization: String!, $repository: String!) {
   repository(owner: $organization, name: $repository) {
     name
     nameWithOwner
-    refs(refPrefix: "refs/heads/", last: 20) {
-      nodes {
-        ... on Ref {
-          name
-          target {
-            ... on Commit {
-              history(first: 5) {
-                nodes {
-                  messageHeadline
-                  authoredDate
-                  author {
-                    name
-                  }
-                }
+    defaultBranchRef {
+      name
+    }
+    defaultBranchRef {
+      target {
+        ... on Commit {
+          history(first: 20) {
+            nodes {
+              messageHeadline
+              oid
+              authoredDate
+              author {
+                name
               }
             }
           }
+        }
+      }
+    }
+    refs(refPrefix: "refs/heads/", first: 50) {
+      nodes {
+        ... on Ref {
+          name
         }
       }
     }

@@ -1,14 +1,15 @@
-query ($organization: String!){
+query ($organization: String!) {
   organization(login: $organization) {
     pinnedItems(first: 2, types: [REPOSITORY, GIST]) {
       totalCount
       nodes {
         ... on Repository {
+          name
           nameWithOwner
           licenseInfo {
             name
           }
-          releases(last: 5) {
+          releases {
             totalCount
           }
           defaultBranchRef {
@@ -17,7 +18,10 @@ query ($organization: String!){
           collaborators {
             totalCount
           }
-          object(expression: "HEAD") {
+          refs(refPrefix: "refs/heads/") {
+            totalCount
+          }
+          HEAD: object(expression: "HEAD") {
             ... on Commit {
               history(first: 1) {
                 totalCount
