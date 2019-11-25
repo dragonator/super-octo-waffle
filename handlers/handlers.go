@@ -32,7 +32,7 @@ func FetchPinnedItemsHandler(context *gin.Context) {
 			Name:              node.Repository.Name,
 			NameWithOwner:     node.Repository.NameWithOwner,
 			LicenseName:       node.Repository.LicenseInfo.Name,
-			ContributorsCount: 0, //TODO
+			ContributorsCount: node.Repository.Collaborators.TotalCount,
 			ReleasesCount:     node.Repository.Releases.TotalCount,
 			DefaultBranchName: node.Repository.DefaultBranchRef.Name,
 			CommitsCount:      node.Repository.HEAD.Commit.History.TotalCount,
@@ -61,11 +61,6 @@ func DownloadCommitPatchHandler(context *gin.Context) {
 	if read_err != nil {
 		context.JSON(http.StatusInternalServerError, read_err)
 	}
-
-	//patchJSON, marshal_err := json.Marshal(body)
-	//if marshal_err != nil {
-	//		context.JSON(http.StatusInternalServerError, marshal_err)
-	//}
 
 	context.JSON(http.StatusOK, string(body))
 }

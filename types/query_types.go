@@ -10,6 +10,7 @@ type repository struct {
 	LicenseInfo      struct{ Name string }
 	Releases         struct{ TotalCount int32 } `graphql:"releases(last: 5)"`
 	DefaultBranchRef struct{ Name string }
+	Collaborators    struct{ TotalCount int32 }
 	HEAD             struct {
 		Commit struct {
 			History struct{ TotalCount int32 }
