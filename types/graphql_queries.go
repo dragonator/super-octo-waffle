@@ -40,7 +40,7 @@ type commitsTargetGraphQL struct {
 				Author          struct{ Name string }
 			}
 		} `graphql:"history(first: 20)"`
-	}
+	} `graphql:"... on Commit"`
 }
 
 type RepositoryGraphQL struct {
@@ -57,7 +57,7 @@ type RepositoryGraphQL struct {
 			Nodes []struct {
 				Ref struct {
 					Name string
-				}
+				} `graphql:"... on Ref"`
 			}
 		} `graphql:"refs(refPrefix: \"refs/heads/\", first: 50)"`
 	} `graphql:"repository(owner: $organization, name: $repository)"`
