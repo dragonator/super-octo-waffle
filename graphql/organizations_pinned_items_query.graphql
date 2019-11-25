@@ -11,25 +11,13 @@ query ($organization: String!){
           releases(last: 5) {
             totalCount
           }
-          collaborators(first: 10, affiliation: ALL) {
-            nodes {
-              id
-              login
-              name
-            }
-          }
           defaultBranchRef {
             name
           }
-          refs(first: 100, refPrefix: "refs/heads/") {
-            totalCount
-            nodes {
-              target {
-                ... on Commit {
-                  history(first: 1) {
-                    totalCount
-                  }
-                }
+          object(expression: "HEAD") {
+            ... on Commit {
+              history(first: 1) {
+                totalCount
               }
             }
           }
