@@ -2,12 +2,6 @@
 
 
 [[projects]]
-  name = "github.com/friendsofgo/graphiql"
-  packages = ["."]
-  revision = "cda92ee46d11a39c721305a9fc01a5133c53b88c"
-  version = "v0.2.2"
-
-[[projects]]
   name = "github.com/gin-contrib/sse"
   packages = ["."]
   revision = "54d8467d122d380a14768b6b4e5cd7ca4755938f"
@@ -38,12 +32,6 @@
   version = "v1.3.2"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/graph-gophers/graphql-go"
-  packages = [".","errors","internal/common","internal/exec","internal/exec/packer","internal/exec/resolvable","internal/exec/selected","internal/query","internal/schema","internal/validation","introspection","log","relay","trace"]
-  revision = "f33e813622776db7efec756a9e951bef40932197"
-
-[[projects]]
   name = "github.com/json-iterator/go"
   packages = ["."]
   revision = "03217c3e97663914aec3faafde50d081f197a0a2"
@@ -72,12 +60,6 @@
   packages = ["."]
   revision = "4b7aa43c6742a2c18fdef89dd197aaae7dac7ccd"
   version = "1.0.1"
-
-[[projects]]
-  name = "github.com/opentracing/opentracing-go"
-  packages = [".","ext","log"]
-  revision = "659c90643e714681897ec2521c60567dd21da733"
-  version = "v1.1.0"
 
 [[projects]]
   branch = "master"
@@ -136,6 +118,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "edf3c95973be5cf20b845b1852c38a7ce113f440147486965ef756c4f0258d3c"
+  inputs-digest = "58cd4578a2eb5bdfea7a07c1d6b861927f88d74a1013cb99e99c0537408a0829"
   solver-name = "gps-cdcl"
   solver-version = 1
