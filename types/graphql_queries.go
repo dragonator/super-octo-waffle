@@ -4,46 +4,61 @@ type blobText struct {
 	Blob struct{ Text string } `graphql:"... on Blob"`
 }
 
-type repository struct {
+type repositoryGraphQL struct {
 	Name             string
 	NameWithOwner    string
 	LicenseInfo      struct{ Name string }
-	Releases         struct{ TotalCount int32 } `graphql:"releases(last: 5)"`
+	Releases         struct{ TotalCount int32 }
 	DefaultBranchRef struct{ Name string }
 	Collaborators    struct{ TotalCount int32 }
+	Refs             struct{ TotalCount int32 } `graphql:"refs(refPrefix: \"refs/heads/\")"`
 	HEAD             struct {
 		Commit struct {
-			History struct{ TotalCount int32 }
+			History struct{ TotalCount int32 } `graphql:"history(first: 1)"`
 		} `graphql:"... on Commit"`
-	} `graphql:"object(expression: \"HEAD\")"`
+	} `graphql:"HEAD: object(expression: \"HEAD\")"`
 }
 
-type PinnedRepositoriesQuery struct {
+type PinnedRepositoriesGraphQL struct {
 	Organization struct {
 		PinnedItems struct {
 			TotalCount int32
 			Nodes      []struct {
-				Repository repository `graphql:"... on Repository"`
+				Repository repositoryGraphQL `graphql:"... on Repository"`
 			}
 		} `graphql:"pinnedItems(first: 10, types: [REPOSITORY, GIST])"`
 	} `graphql:"organization(login: $organization)"`
 }
 
-type RepositoryQuery struct {
-	Repository struct {
-		Name          string
-		NameWithOwner string
-		Readme        blobText `graphql:"readme: object(expression: \"HEAD:README.md\")"`
-		PackageJSON   blobText `graphql:"package_json: object(expression: \"HEAD:package.json\")"`
-	} `graphql:"repository(owner: $organization, name: $repository)"`
+type commitsTargetGraphQL struct {
+	Commit struct {
+		History struct {
+			Nodes []struct {
+				MessageHeadline string
+				Oid             string
+				AuthoredDate    string
+				Author          struct{ Name string }
+			}
+		} `graphql:"history(first: 20)"`
+	}
 }
 
-type UnmarshalCommitScheme struct {
-	Commit struct {
-		Message string `json:"message"`
-	} `json:"commit"`
-	Committer struct {
-		Name string `json:"name"`
-		Date string `json:"date"`
-	} `json:"committer"`
+type RepositoryGraphQL struct {
+	Repository struct {
+		Name             string
+		NameWithOwner    string
+		Readme           blobText `graphql:"readme: object(expression: \"HEAD:README.md\")"`
+		PackageJSON      blobText `graphql:"package_json: object(expression: \"HEAD:package.json\")"`
+		DefaultBranchRef struct {
+			Name   string
+			Target commitsTargetGraphQL
+		}
+		Refs struct {
+			Nodes []struct {
+				Ref struct {
+					Name string
+				}
+			}
+		} `graphql:"refs(refPrefix: \"refs/heads/\", first: 50)"`
+	} `graphql:"repository(owner: $organization, name: $repository)"`
 }
