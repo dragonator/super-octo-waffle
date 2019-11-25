@@ -6,8 +6,8 @@ type PinnedRepository struct {
 	LicenseName       string
 	ContributorsCount int32
 	ReleasesCount     int32
-	DefaultBranchName string
-	CommitsCount      int32
+	HEADCommitsCount  int32
+	BranchesCount     int32
 }
 
 type PinnedRepositories struct {
@@ -17,15 +17,17 @@ type PinnedRepositories struct {
 }
 
 type Commit struct {
-	Message      string
-	Author       string
-	AuthoredDate string
+	Message string
+	Author  string
+	Date    string
+	Hash    string
 }
 
 type Repository struct {
-	Name          string
-	NameWithOwner string
-	Readme        string
-	PackageJSON   string
-	Commits       []Commit
+	Name              string
+	NameWithOwner     string
+	Readme            string
+	PackageJSON       string
+	DefaultBranchName string
+	Commits           []Commit
 }
