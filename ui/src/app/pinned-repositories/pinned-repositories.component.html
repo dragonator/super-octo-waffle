@@ -1,1 +1,28 @@
-<p>pinned-repositories works!</p>
+<h2>Pinned repositories</h2>
+<p>Organization</p>
+<p>Pinned items</p>
+<p>Repositories</p>
+<table class="table">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>NameWithOwner</th>
+    <th>LicenseName</th>
+    <th>ContributorsCount</th>
+    <th>ReleasesCount</th>
+    <th>HEADCommitsCount</th>
+    <th>BranchesCount</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="repository info">
+    <td>{{repository.name}}</td>
+    <td>{{repository.nameWithOwner}}</td>
+    <td>{{repository.licenseName}}</td>
+    <td>{{repository.contributorsCount}}</td>
+    <td>{{repository.releasesCount}}</td>
+    <td>{{repository.HEADCommitsCount}}</td>
+    <td>{{repository.branchesCount}}</td>
+  </tr>
+  </tbody>
+</table>
