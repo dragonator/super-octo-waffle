@@ -7,12 +7,14 @@ import { ClarityModule } from '@clr/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './home/home.component';
 import { PinnedRepositoriesComponent } from './pinned-repositories/pinned-repositories.component';
+import { CallbackComponent } from './callback/callback.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    PinnedRepositoriesComponent
+    PinnedRepositoriesComponent,
+    CallbackComponent
   ],
   imports: [
     BrowserModule,
