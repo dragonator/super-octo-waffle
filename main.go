@@ -21,9 +21,9 @@ func main() {
 		}
 	})
 
-	r.GET("/pinnedItems/:organization", handlers.FetchPinnedItemsHandler)
-	r.GET("/pinnedItems/:organization/:repository", handlers.FetchRepositoryDataHandler)
-	r.GET("/pinnedItems/:organization/:repository/commits/:sha", handlers.DownloadCommitPatchHandler)
+	r.GET("/api/pinnedItems/:organization", handlers.FetchPinnedItemsHandler)
+	r.GET("/api/:organization/:repository", handlers.FetchRepositoryDataHandler)
+	r.GET("/api/:organization/:repository/commits/:sha", handlers.DownloadCommitPatchHandler)
 
 	err := r.Run(":3000")
 	if err != nil {
