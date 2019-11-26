@@ -6,14 +6,14 @@ import { AppComponent } from './app.component';
 import { ClarityModule } from '@clr/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './home/home.component';
-import { PinnedRepositoriesComponent } from './pinned-repositories/pinned-repositories.component';
+import { PinnedReposComponent } from './pinned-repos/pinned-repos.component';
 import { CallbackComponent } from './callback/callback.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    PinnedRepositoriesComponent,
+    PinnedReposComponent,
     CallbackComponent
   ],
   imports: [

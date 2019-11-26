@@ -3,15 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
 
 @Injectable()
-export class PinnedRepositoriesService {
+export class PinnedReposService {
   constructor(private httpClient: HttpClient) {}
 
-  getPinnedRepositoriesList(pinnedRepositories: PinnedRepositories) {
-    return this.httpClient.get(environment.gateway + '/pinnedItems/' + PinnedRepositories.organizationName);
+  getPinnedReposList(pinnedRepos: PinnedRepos) {
+    return this.httpClient.get(environment.gateway + '/pinnedItems/' + PinnedRepos.organizationName);
   }
 }
 
-type PinnedRepository struct {
+type PinnedRepo struct {
 	name              string;
 	nameWithOwner     string;
 	licenseName       string;
@@ -21,8 +21,8 @@ type PinnedRepository struct {
 	branchesCount     int;
 }
 
-export class PinnedRepositories {
+export class PinnedRepos {
   organizationName: string;
   totalCount: int;
-  repositories: Array<PinnedRepository>;
+  repositories: Array<PinnedRepo>;
 }

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PinnedRepositoriesComponent } from './pinned-repositories.component';
+import { PinnedReposComponent } from './pinned-repos.component';
 
-describe('PinnedRepositoriesComponent', () => {
-  let component: PinnedRepositoriesComponent;
-  let fixture: ComponentFixture<PinnedRepositoriesComponent>;
+describe('PinnedReposComponent', () => {
+  let component: PinnedReposComponent;
+  let fixture: ComponentFixture<PinnedReposComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PinnedRepositoriesComponent ]
+      declarations: [ PinnedReposComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PinnedRepositoriesComponent);
+    fixture = TestBed.createComponent(PinnedReposComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
