@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'pinnedRepos/:organization', component: PinnedReposComponent,  canActivate: [AuthGuardService] },
-  { path: 'callback', component: CallbackComponent }
+  { path: 'login/callback', component: CallbackComponent }
 ];
 
 @NgModule({
