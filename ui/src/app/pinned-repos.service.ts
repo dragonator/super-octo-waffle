@@ -7,7 +7,7 @@ export class PinnedReposService {
   constructor(private httpClient: HttpClient) {}
 
   getPinnedReposList(pinnedRepos: PinnedRepos) {
-    return this.httpClient.get(environment.gateway + '/pinnedItems/' + pinnedRepos.organizationName);
+    return this.httpClient.get(environment.gateway + '/pinnedRepos/' + pinnedRepos.organizationName);
   }
 }
 
