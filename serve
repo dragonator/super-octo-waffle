@@ -1,0 +1,6 @@
+#!/bin/sh
+
+gin --port 4201 --bin super-octo-waffle --immediate --all &
+cd ui && ng serve &
+
+wait
