@@ -7,22 +7,22 @@ export class PinnedReposService {
   constructor(private httpClient: HttpClient) {}
 
   getPinnedReposList(pinnedRepos: PinnedRepos) {
-    return this.httpClient.get(environment.gateway + '/pinnedItems/' + PinnedRepos.organizationName);
+    return this.httpClient.get(environment.gateway + '/pinnedItems/' + pinnedRepos.organizationName);
   }
 }
 
-type PinnedRepo struct {
-	name              string;
-	nameWithOwner     string;
-	licenseName       string;
-	contributorsCount int;
-	releasesCount     int;
-	HEADCommitsCount  int;
-	branchesCount     int;
+export class PinnedRepo {
+	name:              string;
+	nameWithOwner:     string;
+	licenseName:       string;
+	contributorsCount: number;
+	releasesCount:     number;
+	HEADCommitsCount:  number;
+	branchesCount:     number;
 }
 
 export class PinnedRepos {
   organizationName: string;
-  totalCount: int;
+  totalCount: number;
   repositories: Array<PinnedRepo>;
 }
