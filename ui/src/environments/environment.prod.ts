@@ -3,6 +3,5 @@ export const environment = {
   gateway:  '',
   callback: 'http://localhost:4200/callback',
   domain:   'dev-a638a1un.auth0.com',
-  clientId: 'pQ1G2vrVKrwkJfjIERwc7OeVuEzEVO8Y',
-  audience: 'https://super-octo-waffle-api',
+  clientId: 'pQ1G2vrVKrwkJfjIERwc7OeVuEzEVO8Y'
 };

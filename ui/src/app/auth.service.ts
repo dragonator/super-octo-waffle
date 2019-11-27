@@ -18,7 +18,6 @@ export class AuthService {
     clientID: environment.clientId,
     domain: environment.domain,
     responseType: 'token id_token',
-    audience: environment.audience,
     redirectUri: environment.callback,
     scope: 'openid'
   });
