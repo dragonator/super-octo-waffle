@@ -1,10 +1,13 @@
 package main
 
 import (
+	"os"
 	"path"
 	"path/filepath"
 
+	"github.com/auth0-community/go-auth0"
 	"github.com/gin-gonic/gin"
+	jose "gopkg.in/square/go-jose.v2"
 
 	"github.com/dragonator/super-octo-waffle/src/server/handlers"
 )
@@ -12,24 +15,55 @@ import (
 func main() {
 	r := gin.Default()
 	r.Use(CORSMiddleware())
+
 	r.NoRoute(func(c *gin.Context) {
 		dir, file := path.Split(c.Request.RequestURI)
 		ext := filepath.Ext(file)
 		if file == "" || ext == "" {
-			c.File("./ui/dist/ui/index.html")
+			c.File("../../dist/ui/index.html")
 		} else {
-			c.File("./ui/dist/ui/" + path.Join(dir, file))
+			c.File("../../dist/ui/" + path.Join(dir, file))
 		}
 	})
 
-	r.GET("/api/pinnedItems/:organization", handlers.FetchPinnedItemsHandler)
-	r.GET("/api/repo/:organization/:repository", handlers.FetchRepositoryDataHandler)
-	r.GET("/api/commit/:organization/:repository/:sha", handlers.DownloadCommitPatchHandler)
+	authorized := r.Group("/")
+	authorized.Use(authRequired())
+	authorized.GET("/api/pinnedItems/:organization", handlers.FetchPinnedItemsHandler)
+	authorized.GET("/api/repo/:organization/:repository", handlers.FetchRepositoryDataHandler)
+	authorized.GET("/api/commit/:organization/:repository/:sha", handlers.DownloadCommitPatchHandler)
 
 	err := r.Run(":3000")
 	if err != nil {
 		panic(err)
 	}
+}
+
+// ValidateRequest will verify that a token received from an http request
+// is valid and signyed by Auth0
+func authRequired() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		audience := os.Getenv("AUTH0_API_IDENTIFIER")
+		domain := os.Getenv("AUTH0_DOMAIN")
+
+		var auth0Domain = "https://" + domain + "/"
+		client := auth0.NewJWKClient(auth0.JWKClientOptions{URI: auth0Domain + ".well-known/jwks.json"}, nil)
+		configuration := auth0.NewConfiguration(client, []string{audience}, auth0Domain, jose.RS256)
+		validator := auth0.NewValidator(configuration, nil)
+
+		_, err := validator.ValidateRequest(c.Request)
+
+		if err != nil {
+			log.Println(err)
+			terminateWithError(http.StatusUnauthorized, "token is not valid", c)
+			return
+		}
+		c.Next()
+	}
+}
+
+func terminateWithError(statusCode int, message string, c *gin.Context) {
+	c.JSON(statusCode, gin.H{"error": message})
+	c.Abort()
 }
 
 func CORSMiddleware() gin.HandlerFunc {

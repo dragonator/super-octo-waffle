@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# set env variables
+export AUTH0_API_IDENTIFIER="https://super-octo-waffle-api"
+export AUTH0_DOMAIN="https://dev-a638a1un.auth0.com"
+
 ng serve & # PORT 4200
 gin --port 4201 --path . --build ./src/server --bin super-octo-waffle --immediate --all &
 
