@@ -6,10 +6,12 @@ import { CallbackComponent }    from './callback/callback.component';
 import { PinnedReposComponent } from './pinned-repos/pinned-repos.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
+  { path: '',      redirectTo: 'home',                         pathMatch: 'full' },
+  { path: 'login', redirectTo: 'dev-a638a1un.auth0.com/login', pathMatch: 'full'},
+
+  { path: 'login/callback',            component: CallbackComponent },
+  { path: 'home',                      component: HomeComponent },
   { path: 'pinnedRepos/:organization', component: PinnedReposComponent,  canActivate: [AuthGuardService] },
-  { path: 'login/callback', component: CallbackComponent }
 ];
 
 @NgModule({
