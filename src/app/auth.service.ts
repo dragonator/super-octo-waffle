@@ -17,6 +17,7 @@ export class AuthService {
   auth0 = new auth0.WebAuth({
     clientID: environment.clientId,
     domain: environment.domain,
+    audience: environment.audience,
     responseType: 'token id_token',
     redirectUri: environment.callback,
     scope: 'openid'
