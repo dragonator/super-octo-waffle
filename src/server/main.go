@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/dragonator/super-octo-waffle/handlers"
+	"github.com/dragonator/super-octo-waffle/src/server/handlers"
 )
 
 func main() {

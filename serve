@@ -1,6 +1,6 @@
 #!/bin/sh
 
 ng serve & # PORT 4200
-gin --port 4201 --bin super-octo-waffle --immediate --all &
+gin --port 4201 --path . --build ./src/server --bin super-octo-waffle --immediate --all &
 
 wait

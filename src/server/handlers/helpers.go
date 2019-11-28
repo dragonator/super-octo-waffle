@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/dragonator/super-octo-waffle/types"
+	"github.com/dragonator/super-octo-waffle/src/server/types"
 )
 
 func initializePinnedRepositories(

@@ -10,7 +10,7 @@ import (
 	"github.com/shurcooL/githubv4"
 	"golang.org/x/oauth2"
 
-	"github.com/dragonator/super-octo-waffle/types"
+	"github.com/dragonator/super-octo-waffle/src/server/types"
 )
 
 func FetchPinnedItemsHandler(context *gin.Context) {
