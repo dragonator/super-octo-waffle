@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable }  from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
+import { Router }      from '@angular/router';
 
 import * as auth0 from 'auth0-js';
 
@@ -15,12 +15,12 @@ export class AuthService {
   expires_at: string;
 
   auth0 = new auth0.WebAuth({
-    clientID: environment.clientId,
-    domain: environment.domain,
-    audience: environment.audience,
+    clientID:     environment.clientId,
+    domain:       environment.domain,
+    audience:     environment.audience,
     responseType: 'token id_token',
-    redirectUri: environment.callback,
-    scope: 'openid'
+    redirectUri:  environment.callback,
+    scope:        'openid'
   });
 
   public login(): void {
@@ -40,16 +40,16 @@ export class AuthService {
 
   private setSession(authResult): void {
     // Set the time that the Access Token will expire at
-    const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+    const expiresAt   = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
     this.access_token = authResult.accessToken;
-    this.id_token = authResult.idToken;
-    this.expires_at = expiresAt;
+    this.id_token     = authResult.idToken;
+    this.expires_at   = expiresAt;
   }
 
   public logout(): void {
     this.access_token = null;
-    this.id_token = null;
-    this.expires_at = null;
+    this.id_token     = null;
+    this.expires_at   = null;
     // Go back to the home route
     this.router.navigate(['/']);
   }
