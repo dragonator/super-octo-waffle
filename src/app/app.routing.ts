@@ -1,9 +1,9 @@
-import { HomeComponent }        from './home/home.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule }             from '@angular/core';
-import { AuthGuardService }     from './auth-guard.service';
-import { CallbackComponent }    from './callback/callback.component';
-import { PinnedReposComponent } from './pinned-repos/pinned-repos.component';
+import { AuthGuardService }     from '@app/_helpers';
+import { HomeComponent }        from '@app/home';
+import { CallbackComponent }    from '@app/callback';
+import { PinnedReposComponent } from '@app/pinned-repos';
 
 const routes: Routes = [
   { path: '',      redirectTo: 'home',                         pathMatch: 'full' },
