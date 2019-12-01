@@ -1,6 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule }             from '@angular/core';
-import { AuthGuardService }     from '@app/_helpers';
+import { AuthGuard }            from '@app/_helpers';
 import { HomeComponent }        from '@app/home';
 import { CallbackComponent }    from '@app/callback';
 import { PinnedReposComponent } from '@app/pinned-repos';
@@ -11,7 +11,7 @@ const routes: Routes = [
 
   { path: 'login/callback',            component: CallbackComponent },
   { path: 'home',                      component: HomeComponent },
-  { path: 'pinnedRepos/:organization', component: PinnedReposComponent,  canActivate: [AuthGuardService] },
+  { path: 'pinnedRepos/:organization', component: PinnedReposComponent,  canActivate: [AuthGuard] },
 ];
 
 @NgModule({
