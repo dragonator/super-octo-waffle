@@ -10,10 +10,8 @@ import { AppComponent }         from '@app/app.component';
 import { CallbackComponent }    from '@app/callback';
 import { HomeComponent }        from '@app/home';
 import { PinnedReposComponent } from '@app/pinned-repos';
-import { AuthGuardService }     from '@app/_helpers';
-import { TokenInterceptor }     from '@app/_helpers';
-import { AuthService }          from '@app/_services';
-import { PinnedReposService }   from '@app/_services';
+import { AuthGuard, JwtInterceptor }       from '@app/_helpers';
+import { AuthService, PinnedReposService } from '@app/_services';
 
 @NgModule({
   declarations: [
@@ -29,9 +27,9 @@ import { PinnedReposService }   from '@app/_services';
     FormsModule,
     HttpClientModule
   ],
-  providers: [AuthGuardService, AuthService, PinnedReposService, {
+  providers: [AuthGuard, AuthService, PinnedReposService, {
     provide: HTTP_INTERCEPTORS,
-    useClass: TokenInterceptor,
+    useClass: JwtInterceptor,
     multi: true
   }],
   bootstrap: [AppComponent]
