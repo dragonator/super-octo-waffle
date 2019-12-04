@@ -8,13 +8,13 @@
         </button>
         <button
           class="btn btn-light btn-margin"
-          *ngIf="!auth.isAuthenticated()"
+          *ngIf="auth.currentUserValue == null"
           (click)="auth.login()">
             Log In
         </button>
         <button
           class="btn btn-light btn-margin "
-          *ngIf="auth.isAuthenticated()"
+          *ngIf="auth.currentUserValue != null"
           (click)="auth.logout()">
             Log Out
         </button>

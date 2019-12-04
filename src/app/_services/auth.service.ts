@@ -1,6 +1,9 @@
 import { Injectable }  from '@angular/core';
 import { Router }      from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
+
 import { environment } from '@environments/environment';
+import { User, Token } from '@app/_models';
 
 import * as auth0 from 'auth0-js';
 
@@ -8,11 +11,14 @@ import * as auth0 from 'auth0-js';
 
 @Injectable()
 export class AuthService {
-  constructor(public router: Router)  {}
 
-  access_token: string;
-  id_token: string;
-  expires_at: string;
+  private currentUserSubject: BehaviorSubject<User>;
+  public  currentUser:        Observable<User>;
+
+  constructor(public router: Router)  {
+    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+    this.currentUser = this.currentUserSubject.asObservable();
+  }
 
   auth0 = new auth0.WebAuth({
     clientID:     environment.clientId,
@@ -20,8 +26,12 @@ export class AuthService {
     audience:     environment.audience,
     responseType: 'token id_token',
     redirectUri:  environment.callback,
-    scope:        'openid'
+    scope:        'openid profile'
   });
+
+  public get currentUserValue(): User {
+    return this.currentUserSubject.value;
+  }
 
   public login(): void {
     this.auth0.authorize();
@@ -29,39 +39,29 @@ export class AuthService {
 
   public handleAuthentication(): void {
     this.auth0.parseHash((err, authResult) => {
-      if (err) console.log(err);
-      if (!err && authResult && authResult.accessToken && authResult.idToken) {
-        window.location.hash = '';
-        this.setSession(authResult);
+      if (err) {
+        return console.log(err);
       }
+
+      this.auth0.client.userInfo(authResult.accessToken, (err, auth0User) => {
+        if (err) {
+          return console.log(err);
+        }
+
+        var expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+        var token     = new Token(authResult.accessToken, authResult.idToken, authResult.expiresAt);
+        var user      = new User(auth0User.nickname, token);
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        this.currentUserSubject.next(user);
+      });
+
       this.router.navigate(['/home']);
     });
   }
 
-  private setSession(authResult): void {
-    // Set the time that the Access Token will expire at
-    const expiresAt   = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
-    this.access_token = authResult.accessToken;
-    this.id_token     = authResult.idToken;
-    this.expires_at   = expiresAt;
-  }
-
   public logout(): void {
-    this.access_token = null;
-    this.id_token     = null;
-    this.expires_at   = null;
-    // Go back to the home route
+    localStorage.removeItem('currentUser');
+    this.currentUserSubject.next(null);
     this.router.navigate(['/']);
-  }
-
-  public isAuthenticated(): boolean {
-    // Check whether the current time is past the
-    // Access Token's expiry time
-    const expiresAt = JSON.parse(this.expires_at || '{}');
-    return new Date().getTime() < expiresAt;
-  }
-
-  public createAuthHeaderValue(): string {
-    return 'Bearer ' + this.access_token;
   }
 }
