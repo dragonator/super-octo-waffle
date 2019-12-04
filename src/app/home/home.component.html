@@ -1,4 +1,6 @@
 <div class="c-block">
   <h2>Welcome Home!</h2>
-  <a class="btn btn-primary" routerLink="/pinnedRepos/vmware">Pinned items of vmware</a>
+  <label for="owner" id="lbl-owner">Owner :</label>
+  <input [(ngModel)]="owner" type="text" id="inpt-owner" required>
+  <a routerLink="/pinnedRepos/{{owner}}" class="btn btn-primary" >View pinned repositories</a>
 </div>
