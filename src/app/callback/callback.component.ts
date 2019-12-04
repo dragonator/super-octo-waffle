@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService }       from '@app/_services/auth.service';
+import { Router }            from '@angular/router';
+
+import { AuthService } from '@app/_services/auth.service';
 
 @Component({
   selector:    'app-callback',
@@ -8,9 +10,10 @@ import { AuthService }       from '@app/_services/auth.service';
 })
 export class CallbackComponent implements OnInit {
 
-  constructor(private auth: AuthService) {}
+  constructor(private router: Router, private auth: AuthService) {}
 
   ngOnInit() {
     this.auth.handleAuthentication();
+    this.router.navigate(['/home']);
   }
 }

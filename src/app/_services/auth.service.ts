@@ -1,5 +1,4 @@
 import { Injectable }  from '@angular/core';
-import { Router }      from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { environment } from '@environments/environment';
@@ -15,7 +14,7 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User>;
   public  currentUser:        Observable<User>;
 
-  constructor(public router: Router)  {
+  constructor()  {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
   }
@@ -54,14 +53,11 @@ export class AuthService {
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
       });
-
-      this.router.navigate(['/home']);
     });
   }
 
   public logout(): void {
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
-    this.router.navigate(['/']);
   }
 }
