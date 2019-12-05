@@ -10,6 +10,7 @@ import { AppComponent }              from '@app/app.component';
 import { CallbackComponent }         from '@app/callback';
 import { HomeComponent }             from '@app/home';
 import { PinnedReposComponent }      from '@app/pinned-repos';
+import { RepoComponent }             from '@app/repo';
 import { AuthGuard, JwtInterceptor } from '@app/_helpers';
 import { AuthService, API }          from '@app/_services';
 
@@ -18,7 +19,8 @@ import { AuthService, API }          from '@app/_services';
     AppComponent,
     HomeComponent,
     PinnedReposComponent,
-    CallbackComponent
+    CallbackComponent,
+    RepoComponent
   ],
   imports: [
     AppRoutingModule,
