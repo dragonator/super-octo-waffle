@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute }               from '@angular/router';
+import { Router, ActivatedRoute }       from '@angular/router';
 
 import { API }         from '@app/_services/api.service';
 import { PinnedRepos } from '@app/_models';
@@ -13,7 +13,14 @@ export class PinnedReposComponent implements OnInit, OnDestroy {
   public pinnedRepos: PinnedRepos;
   private sub: any;
 
-  constructor(private route: ActivatedRoute, private api: API) { }
+  constructor(
+    private route: ActivatedRoute,
+    private api: API,
+    private router: Router) { }
+
+  public goToRepo(organization: string, repo: string) {
+    this.router.navigate(['/repo/' + organization + '/' + repo]);
+  }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {

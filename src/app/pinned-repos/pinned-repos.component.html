@@ -16,14 +16,15 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let repository of pinnedRepos.Repositories">
-        <td>{{repository.Name}}</td>
-        <td>{{repository.NameWithOwner}}</td>
-        <td>{{repository.LicenseName}}</td>
-        <td>{{repository.ContributorsCount}}</td>
-        <td>{{repository.ReleasesCount}}</td>
-        <td>{{repository.HEADCommitsCount}}</td>
-        <td>{{repository.BranchesCount}}</td>
+      <tr *ngFor="let repo of pinnedRepos.Repositories" class="pinned-repo-row"
+          (click)="goToRepo(pinnedRepos.OrganizationName, repo.Name)">
+        <td>{{repo.Name}}</td>
+        <td>{{repo.NameWithOwner}}</td>
+        <td>{{repo.LicenseName}}</td>
+        <td>{{repo.ContributorsCount}}</td>
+        <td>{{repo.ReleasesCount}}</td>
+        <td>{{repo.HEADCommitsCount}}</td>
+        <td>{{repo.BranchesCount}}</td>
       </tr>
     </tbody>
   </table>
