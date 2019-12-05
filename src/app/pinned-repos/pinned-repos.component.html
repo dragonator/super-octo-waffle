@@ -1,28 +1,30 @@
-<h2>Pinned repositories</h2>
-<p>Organization</p>
-<p>Pinned items</p>
-<p>Repositories</p>
-<table class="table">
-  <thead>
-  <tr>
-    <th>Name</th>
-    <th>NameWithOwner</th>
-    <th>LicenseName</th>
-    <th>ContributorsCount</th>
-    <th>ReleasesCount</th>
-    <th>HEADCommitsCount</th>
-    <th>BranchesCount</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let repository info">
-    <td>{{repository.name}}</td>
-    <td>{{repository.nameWithOwner}}</td>
-    <td>{{repository.licenseName}}</td>
-    <td>{{repository.contributorsCount}}</td>
-    <td>{{repository.releasesCount}}</td>
-    <td>{{repository.HEADCommitsCount}}</td>
-    <td>{{repository.branchesCount}}</td>
-  </tr>
-  </tbody>
-</table>
+<div *ngIf="pinnedRepos">
+  <h2>Pinned repositories</h2>
+  <p>Organization: {{pinnedRepos.OrganizationName}}</p>
+  <p>Pinned items: {{pinnedRepos.TotalCount}}</p>
+  <p>Repositories:</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>NameWithOwner</th>
+        <th>LicenseName</th>
+        <th>ContributorsCount</th>
+        <th>ReleasesCount</th>
+        <th>HEADCommitsCount</th>
+        <th>BranchesCount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let repository of pinnedRepos.Repositories">
+        <td>{{repository.Name}}</td>
+        <td>{{repository.NameWithOwner}}</td>
+        <td>{{repository.LicenseName}}</td>
+        <td>{{repository.ContributorsCount}}</td>
+        <td>{{repository.ReleasesCount}}</td>
+        <td>{{repository.HEADCommitsCount}}</td>
+        <td>{{repository.BranchesCount}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
