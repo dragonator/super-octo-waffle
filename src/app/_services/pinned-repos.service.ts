@@ -8,7 +8,7 @@ import { PinnedRepos } from '@app/_models';
 export class PinnedReposService {
   constructor(private httpClient: HttpClient) {}
 
-  getPinnedReposList(pinnedRepos: PinnedRepos) {
-    return this.httpClient.get(environment.gateway + '/pinnedRepos/' + pinnedRepos.organizationName);
+  getPinnedReposList(owner: string) {
+    return this.httpClient.get<PinnedRepos>(environment.gateway + '/api/pinnedRepos/' + owner);
   }
 }
