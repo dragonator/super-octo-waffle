@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute }               from '@angular/router';
 
-import { PinnedReposService } from '@app/_services/pinned-repos.service';
-import { PinnedRepos        } from '@app/_models';
+import { API }         from '@app/_services/api.service';
+import { PinnedRepos } from '@app/_models';
 
 @Component({
   selector:    'app-pinned-repos',
@@ -13,11 +13,11 @@ export class PinnedReposComponent implements OnInit, OnDestroy {
   public pinnedRepos: PinnedRepos;
   private sub: any;
 
-  constructor(private route: ActivatedRoute, private pinnedReposService: PinnedReposService) { }
+  constructor(private route: ActivatedRoute, private api: API) { }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.pinnedReposService.getPinnedReposList(params['organization'])
+      this.api.fetchPinnedRepos(params['organization'])
         .subscribe(data => {
           this.pinnedRepos = data;
         })

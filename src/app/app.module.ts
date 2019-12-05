@@ -5,13 +5,13 @@ import { FormsModule }             from '@angular/forms';
 import { NgModule }                from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { AppRoutingModule }     from '@app/app.routing';
-import { AppComponent }         from '@app/app.component';
-import { CallbackComponent }    from '@app/callback';
-import { HomeComponent }        from '@app/home';
-import { PinnedReposComponent } from '@app/pinned-repos';
-import { AuthGuard, JwtInterceptor }       from '@app/_helpers';
-import { AuthService, PinnedReposService } from '@app/_services';
+import { AppRoutingModule }          from '@app/app.routing';
+import { AppComponent }              from '@app/app.component';
+import { CallbackComponent }         from '@app/callback';
+import { HomeComponent }             from '@app/home';
+import { PinnedReposComponent }      from '@app/pinned-repos';
+import { AuthGuard, JwtInterceptor } from '@app/_helpers';
+import { AuthService, API }          from '@app/_services';
 
 @NgModule({
   declarations: [
@@ -27,7 +27,7 @@ import { AuthService, PinnedReposService } from '@app/_services';
     FormsModule,
     HttpClientModule
   ],
-  providers: [AuthGuard, AuthService, PinnedReposService, {
+  providers: [AuthGuard, AuthService, API, {
     provide: HTTP_INTERCEPTORS,
     useClass: JwtInterceptor,
     multi: true
