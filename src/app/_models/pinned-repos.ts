@@ -1,15 +1,15 @@
 export class PinnedRepo {
-	name:              string;
-	nameWithOwner:     string;
-	licenseName:       string;
-	contributorsCount: number;
-	releasesCount:     number;
-	HEADCommitsCount:  number;
-	branchesCount:     number;
+  Name:              string;
+  NameWithOwner:     string;
+  LicenseName:       string;
+  ContributorsCount: number;
+  ReleasesCount:     number;
+  HEADCommitsCount:  number;
+  BranchesCount:     number;
 }
 
 export class PinnedRepos {
-  organizationName: string;
-  totalCount: number;
-  repositories: Array<PinnedRepo>;
+  OrganizationName: string;
+  TotalCount: number;
+  Repositories: PinnedRepo[];
 }
