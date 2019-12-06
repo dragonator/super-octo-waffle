@@ -27,8 +27,8 @@ func main() {
 	}
 }
 
-// ValidateRequest will verify that a token received from an http request
-// is valid and signyed by Auth0
+// ValidateRequest will verify that a token received
+// from an http request is valid and signed by Auth0
 func authRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		audience := os.Getenv("AUTH0_API_IDENTIFIER")
