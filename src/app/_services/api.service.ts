@@ -15,4 +15,8 @@ export class API {
   public fetchRepo(owner: string, repo: string) {
     return this.httpClient.get<Repo>(environment.gateway + '/api/repo/' + owner + '/' + repo);
   }
+
+  public fetchCommitPatch(repoWithOwner: string, commit: string) {
+    return this.httpClient.get(environment.gateway + '/api/commit/' + repoWithOwner + '/' + commit);
+  }
 }

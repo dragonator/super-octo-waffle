@@ -1,40 +1,43 @@
 <div *ngIf="repo">
   <h2>{{repo.NameWithOwner}} commits:</h2>
   <a routerLink="/pinnedRepos/{{owner}}" class="btn btn-primary" >Back to pinned repositories</a>
-	<clr-tabs>
-		<clr-tab>
-			<button clrTabLink id="details-btn">Details</button>
-			<clr-tab-content id="details-content" *clrIfActive="true">
-				<p *ngIf="repo.Readme">{{repo.Readme}}</p>
-				<p *ngIf="!repo.Readme && repo.PackageJSON">{{repo.PackageJSON}}</p>
-			</clr-tab-content>
-		</clr-tab>
-		<clr-tab>
-			<button clrTabLink>Commits</button>
-			<clr-tab-content *clrIfActive>
-				<div id="Commits" class="tab">
-					<table class="table">
-						<thead>
-							<tr>
-								<th>Message</th>
-								<th>Date</th>
-								<th>Author</th>
-								<th>Hash</th>
-								<th>Download patch</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr *ngFor="let commit of repo.Commits">
-								<td>{{commit.Message}}</td>
-								<td>{{commit.Date}}</td>
-								<td>{{commit.Author}}</td>
-								<td>{{commit.Hash}}</td>
-								<td><a routerLink="/pinnedRepos/{{owner}}" class="btn btn-primary" >Download patch</a></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</clr-tab-content>
-		</clr-tab>
-	</clr-tabs>
+  <clr-tabs>
+    <clr-tab>
+      <button clrTabLink id="details-btn">Details</button>
+      <clr-tab-content id="details-content" *clrIfActive="true">
+        <p *ngIf="repo.Readme">{{repo.Readme}}</p>
+        <p *ngIf="!repo.Readme && repo.PackageJSON">{{repo.PackageJSON}}</p>
+      </clr-tab-content>
+    </clr-tab>
+    <clr-tab>
+      <button clrTabLink>Commits</button>
+      <clr-tab-content *clrIfActive>
+        <div id="Commits" class="tab">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Message</th>
+                <th>Date</th>
+                <th>Author</th>
+                <th>Hash</th>
+                <th>Download patch</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let commit of repo.Commits">
+                <td>{{commit.Message}}</td>
+                <td>{{commit.Date}}</td>
+                <td>{{commit.Author}}</td>
+                <td>{{commit.Hash}}</td>
+                <td>
+                  <button (click)="downloadPatch(repo.NameWithOwner, commit.Hash)"
+                          class="btn btn-primary" >Download patch</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </clr-tab-content>
+    </clr-tab>
+  </clr-tabs>
 </div>

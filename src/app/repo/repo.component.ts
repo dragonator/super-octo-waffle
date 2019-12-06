@@ -16,12 +16,18 @@ export class RepoComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute, private api: API) { }
 
-  public selectTab(tabName) {
-    var tabs = document.getElementsByClassName("tab");
-    for (var i = 0; i < tabs.length; i++) {
-      tabs[i].style.display = "none";
-    }
-    document.getElementById(tabName).style.display = "block";
+  public downloadPatch(repoWithOwner: string, commit: string) {
+    this.api.fetchCommitPatch(repoWithOwner, commit)
+      .subscribe((response: any) => {
+        let filename = 'patch_for_commit_' + commit;
+        let blob = new Blob([response], {type: response.type});
+        let downloadLink = document.createElement('a');
+        downloadLink.href = window.URL.createObjectURL(blob);
+        downloadLink.setAttribute('download', filename);
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+      }
+    )
   }
 
   ngOnInit() {
