@@ -1,11 +1,8 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"os"
-	"path"
-	"path/filepath"
 
 	"github.com/auth0-community/go-auth0"
 	"github.com/gin-gonic/gin"
@@ -17,16 +14,6 @@ import (
 func main() {
 	r := gin.Default()
 	r.Use(CORSMiddleware())
-
-	r.NoRoute(func(c *gin.Context) {
-		dir, file := path.Split(c.Request.RequestURI)
-		ext := filepath.Ext(file)
-		if file == "" || ext == "" {
-			c.File("../../dist/ui/index.html")
-		} else {
-			c.File("../../dist/ui/" + path.Join(dir, file))
-		}
-	})
 
 	authorized := r.Group("/")
 	authorized.Use(authRequired())
@@ -55,7 +42,6 @@ func authRequired() gin.HandlerFunc {
 		_, err := validator.ValidateRequest(c.Request)
 
 		if err != nil {
-			log.Println(err)
 			terminateWithError(http.StatusUnauthorized, "token is not valid", c)
 			return
 		}
