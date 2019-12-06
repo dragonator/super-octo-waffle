@@ -17,7 +17,7 @@ func main() {
 
 	authorized := r.Group("/")
 	authorized.Use(authRequired())
-	authorized.GET("/api/pinnedItems/:organization", handlers.FetchPinnedItemsHandler)
+	authorized.GET("/api/pinnedRepos/:organization", handlers.FetchPinnedItemsHandler)
 	authorized.GET("/api/repo/:organization/:repository", handlers.FetchRepositoryDataHandler)
 	authorized.GET("/api/commit/:organization/:repository/:sha", handlers.DownloadCommitPatchHandler)
 
