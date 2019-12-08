@@ -49,7 +49,7 @@ export class AuthService {
 
         var expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
         var token     = new Token(authResult.accessToken, authResult.idToken, authResult.expiresAt);
-        var user      = new User(auth0User.nickname, token);
+        var user      = new User(auth0User.nickname, auth0User.sub, token);
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
       });

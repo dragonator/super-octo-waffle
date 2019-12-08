@@ -75,10 +75,26 @@ func FetchRepositoryDataHandler(context *gin.Context) {
 }
 
 func createAuthorizedGithubClient(context *gin.Context) *githubv4.Client {
+	access_token := obtainIdentityProviderToken(context)
+
 	tokenSource := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: os.Getenv("GITHUB_TOKEN")},
+		&oauth2.Token{AccessToken: access_token},
 	)
 	return githubv4.NewClient(oauth2.NewClient(context, tokenSource))
+}
+
+func obtainIdentityProviderToken(context *gin.Context) string {
+	//const BEARER_SCHEMA = "Bearer "
+	//authHeader := context.Request.Header.Get("Authorization")
+	//auth0ManagementToken := authHeader[len(BEARER_SCHEMA):]
+	//user_id := context.Request.URL.Query()["user-id"][0]
+	//
+	//fmt.Println("USER_ID")
+	//fmt.Println(user_id)
+	//fmt.Println("TOKEN")
+	//fmt.Println(auth0ManagementToken)
+
+	return os.Getenv("GITHUB_TOKEN")
 }
 
 func prepareCommitPatchRequest(context *gin.Context) (*http.Request, error) {
