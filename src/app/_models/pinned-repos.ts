@@ -2,7 +2,7 @@ export class PinnedRepo {
   Name:              string;
   NameWithOwner:     string;
   LicenseName:       string;
-  ContributorsCount: number;
+  //ContributorsCount: number;
   ReleasesCount:     number;
   HEADCommitsCount:  number;
   BranchesCount:     number;

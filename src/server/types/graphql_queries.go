@@ -10,9 +10,9 @@ type repositoryGraphQL struct {
 	LicenseInfo      struct{ Name string }
 	Releases         struct{ TotalCount int32 }
 	DefaultBranchRef struct{ Name string }
-	Collaborators    struct{ TotalCount int32 }
-	Refs             struct{ TotalCount int32 } `graphql:"refs(refPrefix: \"refs/heads/\")"`
-	HEAD             struct {
+	//Collaborators    struct{ TotalCount int32 }
+	Refs struct{ TotalCount int32 } `graphql:"refs(refPrefix: \"refs/heads/\")"`
+	HEAD struct {
 		Commit struct {
 			History struct{ TotalCount int32 } `graphql:"history(first: 1)"`
 		} `graphql:"... on Commit"`

@@ -10,13 +10,13 @@ func initializePinnedRepositories(
 	repositories := []types.PinnedRepository{}
 	for _, node := range query.Organization.PinnedItems.Nodes {
 		repositories = append(repositories, types.PinnedRepository{
-			Name:              node.Repository.Name,
-			NameWithOwner:     node.Repository.NameWithOwner,
-			LicenseName:       node.Repository.LicenseInfo.Name,
-			ContributorsCount: node.Repository.Collaborators.TotalCount,
-			ReleasesCount:     node.Repository.Releases.TotalCount,
-			HEADCommitsCount:  node.Repository.HEAD.Commit.History.TotalCount,
-			BranchesCount:     node.Repository.Refs.TotalCount,
+			Name:          node.Repository.Name,
+			NameWithOwner: node.Repository.NameWithOwner,
+			LicenseName:   node.Repository.LicenseInfo.Name,
+			//ContributorsCount: node.Repository.Collaborators.TotalCount,
+			ReleasesCount:    node.Repository.Releases.TotalCount,
+			HEADCommitsCount: node.Repository.HEAD.Commit.History.TotalCount,
+			BranchesCount:    node.Repository.Refs.TotalCount,
 		})
 	}
 

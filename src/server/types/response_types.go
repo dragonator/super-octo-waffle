@@ -1,13 +1,13 @@
 package types
 
 type PinnedRepository struct {
-	Name              string
-	NameWithOwner     string
-	LicenseName       string
-	ContributorsCount int32
-	ReleasesCount     int32
-	HEADCommitsCount  int32
-	BranchesCount     int32
+	Name          string
+	NameWithOwner string
+	LicenseName   string
+	//ContributorsCount int32
+	ReleasesCount    int32
+	HEADCommitsCount int32
+	BranchesCount    int32
 }
 
 type PinnedRepositories struct {

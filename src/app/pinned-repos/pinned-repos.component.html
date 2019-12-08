@@ -7,21 +7,21 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th>NameWithOwner</th>
-        <th>LicenseName</th>
-        <th>ContributorsCount</th>
-        <th>ReleasesCount</th>
-        <th>HEADCommitsCount</th>
-        <th>BranchesCount</th>
+        <!-- <th>NameWithOwner</th> -->
+        <th>License Name</th>
+        <!-- <th>ContributorsCount</th> -->
+        <th>Releases Count</th>
+        <th>Commits Count</th>
+        <th>Branches Count</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let repo of pinnedRepos.Repositories" class="pinned-repo-row"
           (click)="goToRepo(pinnedRepos.OrganizationName, repo.Name)">
         <td>{{repo.Name}}</td>
-        <td>{{repo.NameWithOwner}}</td>
+        <!-- <td>{{repo.NameWithOwner}}</td> -->
         <td>{{repo.LicenseName}}</td>
-        <td>{{repo.ContributorsCount}}</td>
+        <!-- <td>{{repo.ContributorsCount}}</td> -->
         <td>{{repo.ReleasesCount}}</td>
         <td>{{repo.HEADCommitsCount}}</td>
         <td>{{repo.BranchesCount}}</td>
