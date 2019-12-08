@@ -42,7 +42,7 @@ func authRequired() gin.HandlerFunc {
 		_, err := validator.ValidateRequest(c.Request)
 
 		if err != nil {
-			terminateWithError(http.StatusUnauthorized, "token is not valid", c)
+			terminateWithError(http.StatusUnauthorized, err.Error(), c)
 			return
 		}
 		c.Next()
